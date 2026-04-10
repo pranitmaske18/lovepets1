@@ -93,35 +93,31 @@
 
             // For demo, just show success message
             // Check if pet exists in localStorage 'pets'
-            let pets = JSON.parse(localStorage.getItem('pets')) || [];
-            const petIndex = pets.findIndex(p => p.petName.toLowerCase() === petInterested.toLowerCase());
+// API adopt
+            const formData = new FormData();
+            formData.append('pet_id', new URLSearchParams(window.location.search).get('pet_id'));
+            formData.append('adopted_by', applicantName);
+            formData.append('adopter_email', applicantEmail);
+            formData.append('message', message);
 
-            if (petIndex === -1) {
-                adoptionMessage.textContent = `Sorry, the pet named "${petInterested}" is not available for adoption.`;
+            fetch('api/adopt-pet.php', {
+                method: 'POST',
+                body: formData
+            }).then(res => res.json()).then(data => {
+                if (data.success) {
+                    adoptionMessage.textContent = `Success! ${petInterested} adopted.`;
+                    adoptionMessage.className = 'message success';
+                } else {
+                    adoptionMessage.textContent = data.error || 'Error adopting.';
+                    adoptionMessage.className = 'message error';
+                }
+                adoptionMessage.style.display = 'block';
+                adoptionForm.reset();
+            }).catch(() => {
+                adoptionMessage.textContent = 'Network error.';
                 adoptionMessage.className = 'message error';
                 adoptionMessage.style.display = 'block';
-                return;
-            }
-
-            // Remove pet from pets list
-            const adoptedPet = pets.splice(petIndex, 1)[0];
-            localStorage.setItem('pets', JSON.stringify(pets));
-
-            // Add adopter info to adoptedPets in localStorage
-            let adoptedPets = JSON.parse(localStorage.getItem('adoptedPets')) || [];
-            adoptedPets.push({
-                ...adoptedPet,
-                adoptedBy: applicantName,
-                adopterEmail: applicantEmail,
-                adoptionMessage: message
             });
-            localStorage.setItem('adoptedPets', JSON.stringify(adoptedPets));
-
-            adoptionMessage.textContent = `Thank you, ${applicantName}, for your interest in adopting ${petInterested}. Adoption successful!`;
-            adoptionMessage.className = 'message success';
-            adoptionMessage.style.display = 'block';
-
-            adoptionForm.reset();
         });
     </script>
 </body>

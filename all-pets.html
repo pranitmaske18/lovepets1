@@ -72,8 +72,8 @@
         }
     </style>
     <script>
-        function adoptPet(petName) {
-            window.location.href = 'buy.html?pet=' + encodeURIComponent(petName);
+function adoptPet(petId, petName) {
+            window.location.href = 'buy.html?pet_id=' + petId + '&name=' + encodeURIComponent(petName);
         }
     </script>
 </head>
