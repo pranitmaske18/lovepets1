@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pet Adoption - Add Pet for Selling</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        body {
+            min-height: 100vh;
+            background:linear-gradient(135deg, #ce71bd 0%, #43c6ac 100%);
+            background-attachment: fixed;
+        }
+         header, footer {
+            background: #b63ba7;
+            padding: 1rem 0;
+            text-align: center;
+        }
+    </style>
+    <style>
+        main.container {
+            max-width: 700px;
+            margin: 30px auto;
+            background: linear-gradient(135deg, #fc47db 0%, #3cfcd5 100%);
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        form div {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        input[type="text"],
+        input[type="tel"],
+        input[type="file"],
+        textarea {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .message {
+            margin-top: 15px;
+            font-weight: 600;
+        }
+        .message.success {
+            color: green;
+        }
+        .message.error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <header>
+         <span style="font-family:'Pacifico',cursive;font-size:2rem;color:#fff;letter-spacing:2px; margin-left:4px;">Love Pets</span>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="all-pets.html">See All Pets</a></li>
+                 <li><a href="#" id="show-adopted-pets">Adopted Pet's</a></li>
+                <li><a href="buy.html">Adopt a Pet</a></li>
+                <li><a href="add-pet.html" class="active">Add Pet</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h2>Add Your loved one Pet </h2>
+        <form id="add-pet-form" novalidate>
+            <div>
+                <label for="petName">Pet Name</label>
+                <input type="text" id="petName" name="petName" required />
+            </div>
+            <div>
+                <label for="description">Description</label>
+                <textarea id="description" name="description" placeholder="Describe your pet..." required></textarea>
+            </div>
+            <div>
+                <label for="photos">Photos (you can select multiple)</label>
+                <input type="file" id="photos" name="photos" accept="image/*" multiple required />
+            </div>
+            <div>
+                <label for="sellerName">Your Name</label>
+                <input type="text" id="sellerName" name="sellerName" required />
+            </div>
+            <div>
+                <label for="phoneNumber">Phone Number</label>
+                <input type="tel" id="phoneNumber" name="phoneNumber" pattern="[0-9]{10}" placeholder="Enter your number" required />
+            </div>
+            <div>
+                <label for="address">Address</label>
+                <textarea id="address" name="address" placeholder="Your address... Or paste location link" required></textarea>
+            </div>
+            <button type="submit">Submit </button>
+            <div id="form-message" class="message" style="display:none;"></div>
+        </form>
+    </main>
+
+    <section id="adopted-pets-section" style="display:none; max-width: 900px; margin: 30px auto; background: rgba(255,255,255,0.95); padding: 20px 30px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <h2>Adopted Pets</h2>
+        <div id="adopted-pets-list" style="display: flex; flex-wrap: wrap; gap: 24px; justify-content: center;">
+            <!-- Adopted pets will be rendered here -->
+        </div>
+        <button id="close-adopted-pets" style="margin-top: 20px; padding: 8px 18px; background: #b63ba7; color: white; border: none; border-radius: 6px; cursor: pointer;">Close</button>
+    </section>
+
+    <footer>
+        &copy; 2025 Pet Adoption. All rights reserved.
+    </footer>
+
+    <script>
+// Check if user is logged in on page load (Firebase optional)
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                if (confirm('Please login to add pet.')) {
+                    window.location.href = 'login.html';
+                }
+            }
+        });
+
+        const form = document.getElementById('add-pet-form');
+        const messageDiv = document.getElementById('form-message');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            messageDiv.style.display = 'none';
+
+            // Check login state before submission
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+// Create FormData for API
+            const formData = new FormData();
+            formData.append('pet_name', form.petName.value.trim());
+            formData.append('description', form.description.value.trim());
+            formData.append('seller_name', form.sellerName.value.trim());
+            formData.append('phone_number', form.phoneNumber.value.trim());
+            formData.append('address', form.address.value.trim());
+            
+            Array.from(form.photos.files).forEach(file => {
+                formData.append('photos[]', file);
+            });
+
+            fetch('api/add-pet.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    messageDiv.textContent = 'Pet added successfully!';
+                    messageDiv.className = 'message success';
+                    messageDiv.style.display = 'block';
+                    form.reset();
+                } else {
+                    throw new Error(data.error || 'Failed');
+                }
+            })
+            .catch(error => {
+                messageDiv.textContent = 'Error: ' + error.message;
+                messageDiv.className = 'message error';
+                messageDiv.style.display = 'block';
+            });
+        });
+
+        // Adopted pets section elements
+        const adoptedPetsSection = document.getElementById('adopted-pets-section');
+        const adoptedPetsList = document.getElementById('adopted-pets-list');
+        const showAdoptedPetsBtn = document.getElementById('show-adopted-pets');
+        const closeAdoptedPetsBtn = document.getElementById('close-adopted-pets');
+
+        async function loadAdoptedPets() {
+            try {
+                const response = await fetch('api/get-adopted.php');
+                const adoptedPets = await response.json();
+                adoptedPetsList.innerHTML = '';
+                if (adoptedPets.length === 0) {
+                    adoptedPetsList.textContent = 'No pets have been adopted yet.';
+                    return;
+                }
+                adoptedPets.forEach(pet => {
+                    const petCard = document.createElement('div');
+                    petCard.className = 'pet-card';
+                    petCard.style.width = '250px';
+                    petCard.style.background = 'white';
+                    petCard.style.borderRadius = '10px';
+                    petCard.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
+                    petCard.style.overflow = 'hidden';
+                    petCard.style.textAlign = 'center';
+                    petCard.style.paddingBottom = '16px';
+                    const photos = pet.photos ? JSON.parse(pet.photos) : [];
+                    const photo = photos[0] || 'https://via.placeholder.com/250x180?text=No+Image';
+                    petCard.innerHTML = `
+                        <img src="${photo}" alt="${pet.pet_name}" style="width:100%; height:180px; object-fit:cover; border-bottom: 2px solid #b63ba7;">
+                        <h3 style="color: #b63ba7; margin-top: 12px;">${pet.pet_name}</h3>
+                        <p style="font-style: italic; color: #555;">${pet.description || ''}</p>
+                        <div class="seller-info" style="font-size: 0.85em; color: #444; margin: 0 12px 12px 12px; text-align: left; background: #f9f9f9; padding: 8px; border-radius: 6px; box-shadow: inset 0 0 5px rgba(182,59,167,0.1);">
+                            <strong>Adopted By:</strong> ${pet.adopted_by || 'Unknown'}<br/>
+                            <strong>Contact:</strong> ${pet.adopter_email || 'N/A'}<br/>
+                            <strong>Message:</strong> ${pet.adoption_message || ''}
+                        </div>
+                    `;
+                    adoptedPetsList.appendChild(petCard);
+                });
+            } catch (error) {
+                adoptedPetsList.textContent = 'Error loading adopted pets: ' + error.message;
+            }
+        }
+
+        // Show adopted pets section on clicking menu item
+        showAdoptedPetsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loadAdoptedPets();
+            adoptedPetsSection.style.display = 'block';
+            window.scrollTo({ top: adoptedPetsSection.offsetTop, behavior: 'smooth' });
+        });
+
+        // Close adopted pets section
+        closeAdoptedPetsBtn.addEventListener('click', () => {
+            adoptedPetsSection.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
+
+

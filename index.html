@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Love Pet's - Home</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        body {
+            background-image: url('https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=crop&w=1500&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+        }
+        header, footer {
+            background:linear-gradient(135deg, #ce71bd 0%, #43c6ac 100%);;
+        }
+        .hero {
+            background:linear-gradient(135deg, #ce71bd 0%, #43c6ac 100%);(158, 206, 251, 0.85);
+            border-radius: 10px;
+            margin: 30px auto 20px auto;
+            padding: 30px 30px 20px 30px;
+            max-width: 700px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .pet-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            justify-content: center;
+            margin: 24px 0;
+        }
+        .pet-gallery img {
+            width: 180px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .pet-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        .pet-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            width: 250px;
+            overflow: hidden;
+            text-align: center;
+            padding-bottom: 16px;
+        }
+        .pet-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        .pet-card h3 {
+            margin: 12px 0 4px 0;
+        }
+        .pet-card p {
+            margin: 0 12px 8px 12px;
+            color: #444;
+        }
+        .info-section {
+            background: rgba(255,255,255,0.92);
+            border-radius: 10px;
+            padding: 24px;
+            max-width: 700px;
+            margin: 0 auto 30px auto;
+            text-align: center;
+            font-size: 1.1em;
+            color: #333;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 0 10px 24px;"></div>
+            <img src="https://provider-static.plex.tv/epg/cms/production/53fb9c59-7d8a-4a74-ab20-8d5764e59aee/PlexTV_LovePets_1920x1080_-_Rashmi_Palvannan.jpg" alt="Pet Picture" style="width:150px;height:80px;border-radius:8px;">
+            <span style="font-family:'Pacifico',cursive;font-size:2rem;color:#fff;letter-spacing:2px; margin-left:4px;">Love Pets</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="all-pets.html">All Pets</a></li>
+                <li><a href="#" id="show-adopted-pets">Adopted Pet's</a></li>
+                <li><a href="buy.html">Adopt a Pet</a></li>
+                <li><a href="add-pet.html">Add Pet</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+               
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h2>Welcome to Pet Adoption</h2>
+        <p>Find your new best friend! Browse our featured pets and give them a loving home.</p>
+    </section>
+
+    <main>
+        <h2 style="text-align:center;">Featured Pets</h2>
+        <div class="pet-list" id="pet-list">
+            <!-- Featured pets will be rendered here -->
+        </div>
+
+        <section class="info-section">
+            <h2>About Our Service</h2>
+            <p>
+                We connect loving families with pets in need of a home. Our platform makes it easy to find, adopt, or list pets for adoption. Join our community and make a difference in a pet's life today!
+            </p>
+            <p>
+                <strong>Why adopt?</strong> Adopting saves lives and brings joy to both you and your new companion. All pets listed are from trusted owners and shelters.
+            </p>
+            <a href="all-pets.html" style="display:inline-block;margin-top:12px;padding:10px 20px;background:#4caf50;color:#fff;border-radius:5px;text-decoration:none;">See All Pets</a>
+        </section>
+    </main>
+
+    <section id="adopted-pets-section" style="display:none; max-width: 900px; margin: 30px auto; background: rgba(255,255,255,0.95); padding: 20px 30px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <h2>Adopted Pets</h2>
+        <div id="adopted-pets-list" style="display: flex; flex-wrap: wrap; gap: 24px; justify-content: center;">
+            <!-- Adopted pets will be rendered here -->
+        </div>
+        <button id="close-adopted-pets" style="margin-top: 20px; padding: 8px 18px; background: #b63ba7; color: white; border: none; border-radius: 6px; cursor: pointer;">Close</button>
+    </section>
+
+    <footer>
+        &copy; 2025 Pet Adoption. All rights reserved.
+    </footer>
+
+    <script>
+        // Example featured pets (replace with your own or fetch from backend)
+        const featuredPets = [
+            {
+                petName: "Dog",
+                description: "A playful golden retriever who loves kids and cuddles.",
+                photo: "https://images.unsplash.com/photo-1558788353-f76d92427f16?auto=format&fit=crop&w=400&q=80"
+            },
+            {
+                petName: "Rabbit",
+                description: "A fluffy white rabbit who loves to hop around and snuggle.",
+                photo: "rabit.jpg"
+            },
+            
+            {
+                petName: "Parrot",
+                description: "A friendly parrot with vibrant feathers and a knack for mimicking sounds.",
+                photo: "parrot.jpg"
+            },
+            {
+                petName: "Fish",
+                description: "A lively goldfish who brightens up any aquarium.",
+                photo: "goldfish.jpg"
+            },
+           
+        ];
+        
+        const petList = document.getElementById('pet-list');
+        petList.innerHTML = '';
+        featuredPets.forEach(pet => {
+            const petCard = document.createElement('div');
+            petCard.className = 'pet-card';
+            petCard.innerHTML = `
+                <img src="${pet.photo}" alt="${pet.petName}">
+                <h3>${pet.petName}</h3>
+                <p>${pet.description}</p>
+            `;
+            petList.appendChild(petCard);
+        });
+
+        // Adopted pets section elements
+        const adoptedPetsSection = document.getElementById('adopted-pets-section');
+        const adoptedPetsList = document.getElementById('adopted-pets-list');
+        const showAdoptedPetsBtn = document.getElementById('show-adopted-pets');
+        const closeAdoptedPetsBtn = document.getElementById('close-adopted-pets');
+
+        // Function to load adopted pets from localStorage and display
+        function loadAdoptedPets() {
+            adoptedPetsList.innerHTML = '';
+            const adoptedPets = JSON.parse(localStorage.getItem('adoptedPets')) || [];
+            if (adoptedPets.length === 0) {
+                adoptedPetsList.textContent = 'No pets have been adopted yet.';
+                return;
+            }
+            adoptedPets.forEach(pet => {
+                const petCard = document.createElement('div');
+                petCard.className = 'pet-card';
+                petCard.style.width = '250px';
+                petCard.style.background = 'white';
+                petCard.style.borderRadius = '10px';
+                petCard.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
+                petCard.style.overflow = 'hidden';
+                petCard.style.textAlign = 'center';
+                petCard.style.paddingBottom = '16px';
+                let photoHtml = '';
+                if (pet.photos && pet.photos.length > 0) {
+                    photoHtml = `<img src="${pet.photos[0]}" alt="${pet.petName}" style="width:100%; height:180px; object-fit:cover; border-bottom: 2px solid #b63ba7;">`;
+                } else if (pet.photo) {
+                    photoHtml = `<img src="${pet.photo}" alt="${pet.petName}" style="width:100%; height:180px; object-fit:cover; border-bottom: 2px solid #b63ba7;">`;
+                } else {
+                    photoHtml = `<img src="https://via.placeholder.com/250x180?text=No+Image" alt="No Image" style="width:100%; height:180px; object-fit:cover; border-bottom: 2px solid #b63ba7;">`;
+                }
+                petCard.innerHTML = `
+                    ${photoHtml}
+                    <h3 style="color: #b63ba7; margin-top: 12px;">${pet.petName}</h3>
+                    <p style="font-style: italic; color: #555;">${pet.description || ''}</p>
+                    <div style="font-size: 0.85em; color: #444; margin: 0 12px 12px 12px; text-align: left; background: #f9f9f9; padding: 8px; border-radius: 6px; box-shadow: inset 0 0 5px rgba(182,59,167,0.1);">
+                        <strong>Adopted By:</strong> ${pet.adoptedBy || 'Unknown'}<br/>
+                        <strong>Contact:</strong> ${pet.adopterEmail || 'N/A'}<br/>
+                        <strong>Message:</strong> ${pet.adoptionMessage || ''}
+                    </div>
+                `;
+                adoptedPetsList.appendChild(petCard);
+            });
+        }
+
+        // Show adopted pets section on clicking menu item
+        showAdoptedPetsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loadAdoptedPets();
+            adoptedPetsSection.style.display = 'block';
+            window.scrollTo({ top: adoptedPetsSection.offsetTop, behavior: 'smooth' });
+        });
+
+        // Close adopted pets section
+        closeAdoptedPetsBtn.addEventListener('click', () => {
+            adoptedPetsSection.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

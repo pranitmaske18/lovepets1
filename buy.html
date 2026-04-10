@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pet Adoption - Adopt a Pet</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        body {
+            background:linear-gradient(135deg, #ce71bd 0%, #43c6ac 100%);
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background:linear-gradient(135deg, #f961dd 0%, #5df9da 100%, rgba(255,255,255,0.85));
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(67,198,172,0.15);
+            padding: 2rem;
+            max-width: 500px;
+            margin: 3rem auto;
+        }
+        header, footer {
+            background: #b63ba7;
+            padding: 1rem 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+      
+        <span style="font-family:'Pacifico',cursive;font-size:2rem;color:#fff;letter-spacing:2px; margin-left:4px;">Love Pets</span>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="all-pets.html">See All Pets</a></li>
+                 <li><a href="adopted-pets.html">Adopted Pet's</a></li>
+                <li><a href="buy.html" class="active">Adopt a Pet</a></li>
+                <li><a href="add-pet.html">Add Pet</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                
+                
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h2>Apply for Pet Adoption</h2>
+        <form id="adoption-form" novalidate>
+            <div>
+                <label for="applicantName">Your Name</label>
+                <input type="text" id="applicantName" name="applicantName" required />
+            </div>
+            <div>
+                <label for="applicantEmail">Your Email</label>
+                <input type="email" id="applicantEmail" name="applicantEmail" required />
+            </div>
+            <div>
+                <label for="petInterested">Pet Name Interested In</label>
+                <input type="text" id="petInterested" name="petInterested" required />
+            </div>
+            <div>
+                <label for="message">Additional Message</label>
+                <textarea id="message" name="message" placeholder="Tell us why you want to adopt this pet..."></textarea>
+            </div>
+            <button type="submit">Submit Application</button>
+            <div id="adoption-message" class="message" style="display:none;"></div>
+        </form>
+    </main>
+
+    <footer>
+        &copy; 2025 Pet Adoption. All rights reserved.
+    </footer>
+
+    <script>
+        const adoptionForm = document.getElementById('adoption-form');
+        const adoptionMessage = document.getElementById('adoption-message');
+
+        adoptionForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            adoptionMessage.style.display = 'none';
+
+            if (!adoptionForm.checkValidity()) {
+                adoptionForm.reportValidity();
+                return;
+            }
+
+            const applicantName = adoptionForm.applicantName.value.trim();
+            const applicantEmail = adoptionForm.applicantEmail.value.trim();
+            const petInterested = adoptionForm.petInterested.value.trim();
+            const message = adoptionForm.message.value.trim();
+
+            // For demo, just show success message
+            // Check if pet exists in localStorage 'pets'
+            let pets = JSON.parse(localStorage.getItem('pets')) || [];
+            const petIndex = pets.findIndex(p => p.petName.toLowerCase() === petInterested.toLowerCase());
+
+            if (petIndex === -1) {
+                adoptionMessage.textContent = `Sorry, the pet named "${petInterested}" is not available for adoption.`;
+                adoptionMessage.className = 'message error';
+                adoptionMessage.style.display = 'block';
+                return;
+            }
+
+            // Remove pet from pets list
+            const adoptedPet = pets.splice(petIndex, 1)[0];
+            localStorage.setItem('pets', JSON.stringify(pets));
+
+            // Add adopter info to adoptedPets in localStorage
+            let adoptedPets = JSON.parse(localStorage.getItem('adoptedPets')) || [];
+            adoptedPets.push({
+                ...adoptedPet,
+                adoptedBy: applicantName,
+                adopterEmail: applicantEmail,
+                adoptionMessage: message
+            });
+            localStorage.setItem('adoptedPets', JSON.stringify(adoptedPets));
+
+            adoptionMessage.textContent = `Thank you, ${applicantName}, for your interest in adopting ${petInterested}. Adoption successful!`;
+            adoptionMessage.className = 'message success';
+            adoptionMessage.style.display = 'block';
+
+            adoptionForm.reset();
+        });
+    </script>
+</body>
+</html>

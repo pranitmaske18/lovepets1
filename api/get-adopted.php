@@ -1,0 +1,17 @@
+<?php
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+
+require 'config.php';
+
+try {
+    $stmt = $pdo->prepare("SELECT * FROM adopted_pets ORDER BY adopted_at DESC");
+    $stmt->execute();
+    $adopted = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    echo json_encode($adopted);
+} catch (PDOException $e) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Database error']);
+}
+?>
+

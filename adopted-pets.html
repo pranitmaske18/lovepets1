@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pet Adoption - Adopted Pets</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #ce71bd 0%, #43c6ac 100%);
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+        header, footer {
+            background: #b63ba7;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0 0 0;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: background 0.2s;
+        }
+        nav a.active, nav a:hover {
+            background: #f8ffae;
+            color: #43c6ac;
+        }
+        main.container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: rgba(255,255,255,0.95);
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .pet-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            justify-content: center;
+        }
+        .pet-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            width: 250px;
+            overflow: hidden;
+            text-align: center;
+            padding-bottom: 16px;
+        }
+        .pet-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 2px solid #b63ba7;
+        }
+        .pet-card h3 {
+            color: #b63ba7;
+            margin: 12px 0 4px 0;
+        }
+        .pet-card p {
+            font-style: italic;
+            color: #555;
+            margin: 0 12px 8px 12px;
+        }
+        .pet-card .adopter-info {
+            font-size: 0.85em;
+            color: #444;
+            margin: 0 12px 12px 12px;
+            text-align: left;
+            background: #f9f9f9;
+            padding: 8px;
+            border-radius: 6px;
+            box-shadow: inset 0 0 5px rgba(182,59,167,0.1);
+        }
+        #close-adopted-pets {
+            margin-top: 20px;
+            padding: 8px 18px;
+            background: #b63ba7;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+         <span style="font-family:'Pacifico',cursive;font-size:2rem;color:#fff;letter-spacing:2px; margin-left:4px;">Love Pets</span>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="all-pets.html">See All Pets</a></li>
+                <li><a href="#" id="show-adopted-pets" class="active">Adopted Pet's</a></li>
+                <li><a href="buy.html">Adopt a Pet</a></li>
+                <li><a href="add-pet.html">Add Pet</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h2>Adopted  Pets</h2>
+        <div id="adopted-pets-list" class="pet-list">
+            <!-- Adopted pets will be rendered here -->
+        </div>
+        <button id="close-adopted-pets">Close</button>
+    </main>
+
+    <script>
+        const adoptedPetsSection = document.querySelector('main.container');
+        const adoptedPetsList = document.getElementById('adopted-pets-list');
+        const showAdoptedPetsBtn = document.getElementById('show-adopted-pets');
+        const closeAdoptedPetsBtn = document.getElementById('close-adopted-pets');
+
+        function loadAdoptedPets() {
+            adoptedPetsList.innerHTML = '';
+            const adoptedPets = JSON.parse(localStorage.getItem('adoptedPets')) || [];
+            if (adoptedPets.length === 0) {
+                adoptedPetsList.textContent = 'No pets have been adopted yet.';
+                return;
+            }
+            adoptedPets.forEach(pet => {
+                const petCard = document.createElement('div');
+                petCard.className = 'pet-card';
+
+                let photoHtml = '';
+                if (pet.photos && pet.photos.length > 0) {
+                    photoHtml = `<img src="${pet.photos[0]}" alt="${pet.petName}">`;
+                } else if (pet.photo) {
+                    photoHtml = `<img src="${pet.photo}" alt="${pet.petName}">`;
+                } else {
+                    photoHtml = `<img src="https://via.placeholder.com/250x180?text=No+Image" alt="No Image">`;
+                }
+
+                petCard.innerHTML = `
+                    ${photoHtml}
+                    <h3>${pet.petName}</h3>
+                    <p>${pet.description || ''}</p>
+                    <div class="adopter-info">
+                        <strong>Adopted By:</strong> ${pet.adoptedBy || 'Unknown'}<br/>
+                        <strong>Contact:</strong> ${pet.adopterEmail || 'N/A'}<br/>
+                        <strong>Message:</strong> ${pet.adoptionMessage || ''}
+                    </div>
+                `;
+                adoptedPetsList.appendChild(petCard);
+            });
+        }
+
+        // Show adopted pets section on clicking menu item
+        showAdoptedPetsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            adoptedPetsSection.style.display = 'block';
+            loadAdoptedPets();
+        });
+
+        // Close adopted pets section
+        closeAdoptedPetsBtn.addEventListener('click', () => {
+            adoptedPetsSection.style.display = 'none';
+        });
+
+        // Initially hide adopted pets section
+        adoptedPetsSection.style.display = 'none';
+    </script>
+</body>
+</html>

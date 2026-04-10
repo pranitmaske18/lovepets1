@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Love Pets - Contact Us</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        body {
+            background:linear-gradient(135deg, #ce71bd 0%, #43c6ac 100%);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+        header {
+            background: #b63ba7;
+            color: #fff;
+            padding: 1rem 0;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(67,198,172,0.1);
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0 0 0;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: background 0.2s;
+        }
+        nav a.active, nav a:hover {
+            background: #f8ffae;
+            color: #43c6ac;
+        }
+        .container {
+            max-width: 500px;
+            margin: 3rem auto;
+            background: rgba(255,255,255,0.9);
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(67,198,172,0.15);
+            padding: 2rem;
+            text-align: center;
+        }
+        .contact-info {
+            margin-top: 2rem;
+            font-size: 1.1rem;
+        }
+        .contact-info div {
+            margin: 1.2rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+        .contact-icon {
+            font-size: 1.5rem;
+            color: #43c6ac;
+        }
+        h2 {
+            color: #43c6ac;
+            margin-bottom: 1.5rem;
+        }
+        footer {
+            background: #d433bc;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+        }
+        @media (max-width: 600px) {
+            .container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+    <!-- Icons CDN (Font Awesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+</head>
+<body>
+    <header>
+         <span style="font-family:'Pacifico',cursive;font-size:2rem;color:#fff;letter-spacing:2px; margin-left:4px;">Love Pets</span>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="all-pets.html">See All Pets</a></li>
+                 <li><a href="adopted-pets.html">Adopted Pet's</a></li>
+                <li><a href="buy.html">Adopt a Pet</a></li>
+                <li><a href="add-pet.html">Add Pet</a></li>
+                <li><a href="contact.html" class="active">Contact Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h2>Contact Us</h2>
+        <div class="contact-info">
+            <div>
+                <span class="contact-icon"><i class="fas fa-phone"></i></span>
+                <span><strong>Phone:</strong> +91 8767860493</span>
+            </div>
+            <div>
+                <span class="contact-icon"><i class="fas fa-envelope"></i></span>
+                <span><strong>Email:</strong> ommante41@gmail.com</span>
+            </div>
+            <div>
+                <span class="contact-icon"><i class="fas fa-map-marker-alt"></i></span>
+                <span><strong>Address:</strong> Near PCCOER ravet, Pune,Maharastra, India</span>
+            </div>
+        </div>
+        <p style="margin-top:2rem;color:#555;">We are here to help you find your perfect companion! Reach out to us for any queries or support.</p>
+    </main>
+
+    <footer>
+        &copy; 2025 Pet Adoption. All rights reserved.
+    </footer>
+</body>
+</html>
